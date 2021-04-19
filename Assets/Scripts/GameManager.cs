@@ -119,10 +119,25 @@ public class GameManager : MonoBehaviour {
 
     public void ClearClickedList()
     {
+        //销毁星星
         foreach (var item in ClickedList)
         {
             item.DestroyStar();
             StarList.Remove(item);
+        }
+        //移动剩余星星
+        foreach (var rest in StarList)
+        {
+            int moveCount = 0;//需要移动的行数
+            foreach (var clicked in ClickedList)
+            {
+                if (rest.Column == clicked.Column && rest.Row > clicked.Row)//统计同一列在下面消失的星星
+                {
+                    moveCount++;
+                }
+            }
+            if (moveCount > 0)
+                rest.OpenMoveDown(moveCount);
         }
         ClickedList.Clear();
     }
