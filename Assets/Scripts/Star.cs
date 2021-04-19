@@ -10,7 +10,7 @@ public class Star : MonoBehaviour {
     public int Row = 0;
     public int Column = 0;
     public Color StarColor = Color.Blue;
-    private float speed = 5.0f;
+    private float speed = 1.0f;
     private int MoveDownCount = 0;
     private bool IsMoveDown = false;
 
@@ -41,7 +41,7 @@ public class Star : MonoBehaviour {
 
     public void OpenMoveDown(int count)//向下移动的开关
     {
-        MoveDownCount = count;
+        MoveDownCount += count;//处理星星移动过程中下方星星又被消去的情况
         IsMoveDown = true;
     }
 
@@ -53,6 +53,7 @@ public class Star : MonoBehaviour {
         else
         {
             this.transform.localPosition = new Vector3(this.transform.localPosition.x, 48 * newRow, this.transform.localPosition.z);
+            MoveDownCount = 0;
             IsMoveDown = false;
             Row = newRow;
         }
