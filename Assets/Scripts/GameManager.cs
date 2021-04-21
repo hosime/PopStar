@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour {
             item.DestroyStar();
             StarList.Remove(item);
         }
-        //移动剩余星星
+        //向下移动剩余星星
         foreach (var rest in StarList)
         {
             int moveCount = 0;//需要移动的行数
@@ -138,6 +138,29 @@ public class GameManager : MonoBehaviour {
             }
             if (moveCount > 0)
                 rest.OpenMoveDown(moveCount);
+        }
+        //向左移动列
+        for (int col = MaxColumn - 2; col >= 0; col--)
+        {
+            bool isEmpty = true;
+            foreach (var rest in StarList)
+            {
+                if (rest.Column == col)
+                {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty)
+            {
+                foreach (var rest in StarList)
+                {
+                    if (rest.Column > col)
+                    {
+                        rest.OpenMoveLeft(1);
+                    }
+                }
+            }
         }
         ClickedList.Clear();
     }
