@@ -8,12 +8,16 @@ public class GameManager : MonoBehaviour {
     public int MaxRow = 12;
     public int MaxColumn = 10;
     public int CurrentScore = 0;
+    public int TargetScore = 1000;
+    public int HurdleIndex = 1;
     public GameObject[] StarObjs;
     public GameObject StarGroup;
     public List<Star> StarList;//所有星星
     public List<Star> ClickedList;//被点击的星星和它相邻的同色星星
 
     public Text CurrentScoreText;
+    public Text TargetScoreText;
+    public Text HurdleIndexText;
 
     public static GameManager gameManager_Instance;
 
@@ -28,6 +32,14 @@ public class GameManager : MonoBehaviour {
 
     }
 
+    void GameRestart()
+    {
+        CreateStarList();
+        CurrentScoreText.text = "当前得分：" + CurrentScore.ToString();
+        HurdleIndex++;
+        HurdleIndexText.text = "当前关卡：" + HurdleIndex.ToString();
+        SetTargetScore();
+    }
 
     void CreateStarList()
     {
@@ -123,9 +135,7 @@ public class GameManager : MonoBehaviour {
 
     public void ClearClickedList()
     {
-        //增加得分
-        CurrentScore += 5 * ClickedList.Count * ClickedList.Count;
-        CurrentScoreText.text = CurrentScore.ToString();
+        CalculateScore();
         //销毁星星
         foreach (var item in ClickedList)
         {
@@ -187,7 +197,38 @@ public class GameManager : MonoBehaviour {
         ClickedList.Clear();
         if (isOver)
         {
-            Debug.Log("over");
+            foreach (var item in StarList)
+            {
+                item.DestroyStar();
+                CurrentScore += 5;
+            }
+            StarList.Clear();
+            CurrentScoreText.text = "当前得分：" + CurrentScore.ToString();
+            if (CurrentScore >= TargetScore)
+            {
+                GameRestart();
+            }
+            else
+            {
+                //gameover
+            }
         }
+    }
+
+    public void CalculateScore()
+    {
+        //增加得分
+        CurrentScore += 5 * ClickedList.Count * ClickedList.Count;
+        CurrentScoreText.text = "当前得分：" + CurrentScore.ToString();
+
+    }
+
+    public void SetTargetScore()
+    {
+        if (HurdleIndex == 1)
+            TargetScore = 1000;
+        else
+            TargetScore = (50 * HurdleIndex + 1850) * HurdleIndex - 900;
+        TargetScoreText.text = "目标得分：" + TargetScore.ToString();
     }
 }
