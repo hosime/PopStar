@@ -1,15 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
     public int MaxRow = 12;
     public int MaxColumn = 10;
+    public int CurrentScore = 0;
     public GameObject[] StarObjs;
     public GameObject StarGroup;
     public List<Star> StarList;//所有星星
     public List<Star> ClickedList;//被点击的星星和它相邻的同色星星
+
+    public Text CurrentScoreText;
 
     public static GameManager gameManager_Instance;
 
@@ -119,6 +123,9 @@ public class GameManager : MonoBehaviour {
 
     public void ClearClickedList()
     {
+        //增加得分
+        CurrentScore += 5 * ClickedList.Count * ClickedList.Count;
+        CurrentScoreText.text = CurrentScore.ToString();
         //销毁星星
         foreach (var item in ClickedList)
         {
