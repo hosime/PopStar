@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour {
     
     // Update is called once per frame
     void Update () {
-        
+
     }
 
 
@@ -163,5 +163,24 @@ public class GameManager : MonoBehaviour {
             }
         }
         ClickedList.Clear();
+    }
+
+    public void JudgeOver()
+    {
+        bool isOver = true;
+        foreach (var star in StarList)
+        {
+            FindTheSameStar(star);
+            if (ClickedList.Count > 0)
+            {
+                isOver = false;
+                break;
+            }
+        }
+        ClickedList.Clear();
+        if (isOver)
+        {
+            Debug.Log("over");
+        }
     }
 }
