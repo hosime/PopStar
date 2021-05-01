@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -19,11 +20,14 @@ public class GameManager : MonoBehaviour {
     public Text TargetScoreText;
     public Text HurdleIndexText;
 
+    public Button RestartButton;
+
     public static GameManager gameManager_Instance;
 
     // Use this for initialization
     void Start () {
         gameManager_Instance = this;
+        RestartButton.gameObject.SetActive(false);
         CreateStarList();
     }
     
@@ -32,7 +36,7 @@ public class GameManager : MonoBehaviour {
 
     }
 
-    void GameRestart()
+    void GoToNext()
     {
         CreateStarList();
         CurrentScoreText.text = "当前得分：" + CurrentScore.ToString();
@@ -200,17 +204,17 @@ public class GameManager : MonoBehaviour {
             foreach (var item in StarList)
             {
                 item.DestroyStar();
-                CurrentScore += 5;
+                CurrentScore += 5; //每个剩余星星加5分
             }
             StarList.Clear();
             CurrentScoreText.text = "当前得分：" + CurrentScore.ToString();
             if (CurrentScore >= TargetScore)
             {
-                GameRestart();
+                GoToNext();
             }
             else
             {
-                //gameover
+                GameOver();
             }
         }
     }
@@ -228,7 +232,17 @@ public class GameManager : MonoBehaviour {
         if (HurdleIndex == 1)
             TargetScore = 1000;
         else
-            TargetScore = (50 * HurdleIndex + 1850) * HurdleIndex - 900;
+            TargetScore = (100 * HurdleIndex + 1700) * HurdleIndex - 800;
         TargetScoreText.text = "目标得分：" + TargetScore.ToString();
+    }
+
+    public void GameOver()
+    {
+        RestartButton.gameObject.SetActive(true);
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("SampleScene");
     }
 }
